@@ -18,7 +18,10 @@ export const ProductCard = (product) => {
                 </div>
                 <div class="product-footer">
                     <span class="product-price">$${product.price.toLocaleString()}</span>
-                    <button class="add-to-cart-btn btn-primary" data-id="${product.id}">Add to Cart</button>
+                    <div class="product-btns">
+                        <button class="view-detail-btn" data-id="${product.id}">Details</button>
+                        <button class="add-to-cart-btn btn-primary" data-id="${product.id}">Add</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,15 +128,31 @@ style.textContent = `
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-top: 1rem;
+    }
+    .product-btns {
+        display: flex;
+        gap: 0.5rem;
     }
     .product-price {
         font-size: 1.25rem;
         font-weight: 700;
         color: var(--text-primary);
     }
-    .add-to-cart-btn {
-        padding: 0.5rem 1rem;
+    .add-to-cart-btn, .view-detail-btn {
+        padding: 0.6rem 1.2rem;
         font-size: 0.8rem;
+        border-radius: 8px;
+    }
+    .view-detail-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-glass);
+        color: var(--text-secondary);
+    }
+    .view-detail-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-color: var(--accent-gold);
     }
     @media (max-width: 480px) {
         .product-grid { grid-template-columns: 1fr; }

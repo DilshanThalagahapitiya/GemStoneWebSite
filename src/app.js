@@ -4,12 +4,15 @@ import { ProductGrid } from './components/ProductGrid.js';
 import { About } from './components/About.js';
 import { Cart } from './components/Cart.js';
 import { Footer } from './components/Footer.js';
+import { ProductDetail } from './components/ProductDetail.js';
+import { Testimonials } from './components/Testimonials.js';
 import { inventory } from './data/inventory.js';
 
 // Application State
 const state = {
     cart: [],
-    isCartOpen: false
+    isCartOpen: false,
+    selectedProduct: null
 };
 
 // Initialization
@@ -18,6 +21,7 @@ const init = () => {
     document.getElementById('navbar-root').innerHTML = Navbar();
     document.getElementById('hero-root').innerHTML = Hero();
     document.getElementById('products-root').innerHTML = ProductGrid();
+    document.getElementById('testimonials-root').innerHTML = Testimonials();
 
     // Inject About before Footer
     const aboutSection = document.createElement('div');
@@ -45,7 +49,7 @@ const initScrollReveal = () => {
         });
     }, observerOptions);
 
-    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+    document.querySelectorAll('.animate-on-scroll, .reveal-on-scroll').forEach(el => observer.observe(el));
 };
 
 const setupEventListeners = () => {
@@ -60,6 +64,17 @@ const setupEventListeners = () => {
             const id = e.target.dataset.id;
             addToCart(id);
         }
+
+        // Product Detail
+        if (e.target.classList.contains('view-detail-btn')) {
+            const id = e.target.dataset.id;
+            openProductDetail(id);
+        }
+
+        if (e.target.id === 'close-detail' || e.target.id === 'product-detail-root') {
+            closeProductDetail();
+        }
+
         if (e.target.id === 'close-cart' || e.target.classList.contains('cart-overlay')) {
             toggleCart();
         }
@@ -72,6 +87,24 @@ const setupEventListeners = () => {
             removeFromCart(index);
         }
     });
+};
+
+const openProductDetail = (id) => {
+    const product = inventory.find(p => p.id === id);
+    if (product) {
+        state.selectedProduct = product;
+        const modal = document.getElementById('product-detail-root');
+        modal.innerHTML = ProductDetail(product);
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+};
+
+const closeProductDetail = () => {
+    const modal = document.getElementById('product-detail-root');
+    modal.classList.remove('active');
+    document.body.style.overflow = state.isCartOpen ? 'hidden' : 'auto';
+    state.selectedProduct = null;
 };
 
 const toggleCart = () => {
